@@ -7,7 +7,7 @@ void ofApp::setup()
     ofBackground(0);
 
     
-    humidity = pressure = temp = visibility = wind = 0;
+    quake0 = quake1 = quake2 = quake3 = 0;
     jThread.init();
     jThread.startThread(true);
 }
@@ -18,11 +18,10 @@ void ofApp::update()
     ////update thread data/////
     jThread.lock();
     
-    humidity = ofToFloat(jThread.humidity);
-    pressure = ofToFloat(jThread.pressure);
-    temp = ofToFloat(jThread.temp);
-    visibility = ofToFloat(jThread.visibility);
-    wind = ofToFloat(jThread.wind);
+        quake0 = ofToFloat(jThread.quake0);
+        quake1 = ofToFloat(jThread.quake1);
+        quake2 = ofToFloat(jThread.quake2);
+        quake3 = ofToFloat(jThread.quake3);
     
     jThread.unlock();
 }
@@ -31,11 +30,10 @@ void ofApp::draw()
 {
     stringstream weather;
     
-    weather << "humidity: " << ofToString(humidity) << endl
-    << "pressure: " << ofToString(pressure) << endl
-    << "temp: " << ofToString(temp) << endl
-    << "visibility: " << ofToString(visibility) << endl
-    << "wind: " << wind << endl;
+    weather << "quake0: " << ofToString(quake0) << endl
+    << "quake: " << ofToString(quake1) << endl
+    << "quake: " << ofToString(quake2) << endl
+    << "quake: " << ofToString(quake3) << endl;
     
     ofDrawBitmapString(weather.str(), 10,10);
     

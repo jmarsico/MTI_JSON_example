@@ -13,7 +13,7 @@ public:
     void init()
     {
         //set the URL to the Kimono API: https://www.kimonolabs.com/apis/4k9ehldm
-        url = "https://www.kimonolabs.com/api/4k9ehldm?apikey=No7h5YUcyCWbbn7xjG0ukUrDZTpjWFUU";
+        url = "https://www.kimonolabs.com/api/7jr79j34?apikey=No7h5YUcyCWbbn7xjG0ukUrDZTpjWFUU";
         //see if the API works
         bool parsingSuccessful = json.open(url);
         
@@ -46,13 +46,12 @@ public:
                 {
                     ofLogNotice("JSONthread::threadedFunction") << "locked";
                     //do stuff
-                     humidity = json["results"]["collection1"][0]["humidity"].asString();
-                     pressure = json["results"]["collection1"][0]["pressure"].asString();
-                     temp = json["results"]["collection1"][0]["temp"].asString();
-                     visibility = json["results"]["collection1"][0]["visibility"].asString();
-                     wind = json["results"]["collection1"][0]["wind"].asString();
+                     quake0 = json["results"]["collection1"][0]["firstSigQuake"].asString();
+                     quake1 = json["results"]["collection1"][1]["firstSigQuake"].asString();
+                     quake2 = json["results"]["collection1"][2]["firstSigQuake"].asString();
+                     quake3 = json["results"]["collection1"][3]["firstSigQuake"].asString();
                     
-                    ofLogNotice("JSONthread::threadedFunction") << "we got data: " << humidity << " " << pressure << " " << temp << " " << visibility;
+                    ofLogNotice("JSONthread::threadedFunction") << "we got data: " << quake0 << " " << quake1 << " " << quake2 << " " << quake3;
                     
                     unlock();
                     ofLogNotice("JSONthread::threadedFunction") << "unlocked. going to sleep...";
@@ -72,6 +71,6 @@ public:
     
     ofxJSONElement json;
     std::string url;
-    string humidity, pressure, temp, visibility, wind;
+    string quake0, quake1, quake2, quake3;
     
 };

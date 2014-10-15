@@ -13,12 +13,8 @@ public:
     void update();
     void draw();
 
-    //JSON & Weather stuff
-    ofxJSONElement json;
-    std::string url;
-    
     JSONthread jThread;
     
-    float humidity, pressure, temp, visibility, wind;
+    float quake0, quake1, quake2 ,quake3;
 
 };
