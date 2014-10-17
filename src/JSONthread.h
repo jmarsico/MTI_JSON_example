@@ -13,20 +13,51 @@ public:
     void init()
     {
         //set the URL to the Kimono API: https://www.kimonolabs.com/apis/4k9ehldm
-        url = "https://www.kimonolabs.com/api/7jr79j34?apikey=No7h5YUcyCWbbn7xjG0ukUrDZTpjWFUU";
+        url = "https://www.kimonolabs.com/api/8o3jrfgs?apikey=No7h5YUcyCWbbn7xjG0ukUrDZTpjWFUU";
         //see if the API works
         bool parsingSuccessful = json.open(url);
         
         if(parsingSuccessful)
         {
             ofLogNotice("JSONthread::Init") << json.getRawString(true);
+ 
+            ofLogNotice("JSONthread::threadedFunction") << "info received";
+            
+            // Attempt to lock the mutex.  If blocking is turned on,
+            if(lock())
+            {
+                ofLogNotice("JSONthread::threadedFunction") << "locked";
+                //do stuff
+                for(int i = 0; i < json["results"]["collection1"].size(); i++)
+                {
+                    
+                    string q= json["results"]["collection1"][i]["amnt"].asString();
+                    quakes.push_back(q);
+                    
+                }
+                
+                ofLogNotice("JSONthread::threadedFunction") << "we got quakes: " << quakes.size();
+                ofLogNotice("JSONthread::threadedFunction") << "firstquake: " << quakes[0];
+                
+                unlock();
+                ofLogNotice("JSONthread::threadedFunction") << "unlocked. going to sleep...";
+                // Sleep for 30 seconds.
+            }
+            else
+            {
+                // If we reach this else statement, it means that we could not
+                // lock our mutex, and so we do not need to call unlock().
+                // Calling unlock without locking will lead to problems.
+                ofLogWarning("JSONthread::threadedFunction") << "Unable to lock mutex.";
+            }
         }
-        
-      //  humidity = wind = temp = visibility = pressure = 0;
-
     }
+
     
+
     
+
+
     /// Our implementation of threadedFunction.
     void threadedFunction()
     {
@@ -46,13 +77,17 @@ public:
                 {
                     ofLogNotice("JSONthread::threadedFunction") << "locked";
                     //do stuff
-                     quake0 = json["results"]["collection1"][0]["firstSigQuake"].asString();
-                     quake1 = json["results"]["collection1"][1]["firstSigQuake"].asString();
-                     quake2 = json["results"]["collection1"][2]["firstSigQuake"].asString();
-                     quake3 = json["results"]["collection1"][3]["firstSigQuake"].asString();
+                    for(int i = 0; i < quakes.size(); i++)
+                    {
                     
-                    ofLogNotice("JSONthread::threadedFunction") << "we got data: " << quake0 << " " << quake1 << " " << quake2 << " " << quake3;
+                        string q= json["results"]["collection1"][i]["amnt"].asString();
+                        quakes[i] = q ;
+                     
+                    }
                     
+                    ofLogNotice("JSONthread::threadedFunction") << "we got quakes: " << quakes.size();
+                    ofLogNotice("JSONthread::threadedFunction") << "firstquake: " << quakes[0];
+
                     unlock();
                     ofLogNotice("JSONthread::threadedFunction") << "unlocked. going to sleep...";
                     // Sleep for 30 seconds.
@@ -71,6 +106,6 @@ public:
     
     ofxJSONElement json;
     std::string url;
-    string quake0, quake1, quake2, quake3;
+    vector<string> quakes;
     
 };

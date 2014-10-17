@@ -4,6 +4,7 @@
 #include "ofMain.h"
 #include "ofxJSON.h"
 #include "JSONthread.h"
+#include "ofxOsc.h"
 
 
 class ofApp: public ofBaseApp
@@ -15,6 +16,9 @@ public:
 
     JSONthread jThread;
     
-    float quake0, quake1, quake2 ,quake3;
+    vector<float> quakes;
+    float firstQuake;
+    
+    ofxOscSender sender;
 
 };
